@@ -10,4 +10,5 @@ export const initialHost : Host = {
     hd: '',
     processor: '',
     mac: '',
+    active: true,
 }

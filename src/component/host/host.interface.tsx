@@ -8,4 +8,5 @@ export interface Host {
     hd: string,
     processor: string,
     mac: string,
+    active: boolean,
 }

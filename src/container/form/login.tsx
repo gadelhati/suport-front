@@ -95,6 +95,7 @@ export const Login = () => {
                             {isValidToken() && <Button onClick={logoutUser}>Logout</Button>}
                             <Button onClick={resetItem}>Reset{existsToken()}</Button>
                         </CenteredContainerItem>
+                        {ispending}
                         <CenteredContainerItem direction={'row'}>
                             {error[0].message !== 'Network Error' ? <>© Marinha do Brasil</> : <>{validationConnection()}</>}
                         </CenteredContainerItem>

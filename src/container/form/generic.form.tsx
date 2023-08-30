@@ -42,7 +42,7 @@ export const GenericForm = <T extends { id: string, name: string }>(object: any)
         aa()
     }, [search])
     const aa = async() => {
-        console.log(search)
+        setKey('ip')
         await retrieve(object.url, page, size, key, search).then((data: any) => {
             startTransition(() => setPageable(data))
             startTransition(() => setStates(data.content))

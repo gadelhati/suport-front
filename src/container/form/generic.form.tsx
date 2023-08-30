@@ -27,15 +27,30 @@ export const GenericForm = <T extends { id: string, name: string }>(object: any)
     const [error, setError] = useState<ErrorMessage[]>([initialErrorMessage])
     const [atribute, setAtribute] = useState<Atribute[]>(AtributeSet(object.object))
     const [page, setPage] = useState<number>(0)
-    const [size, setSize] = useState<number>(8)
+    const [size, setSize] = useState<number>(5)
     const [pageable, setPageable] = useState<Pageable>(initialPageable)
     const [ispending, startTransition] = useTransition()
     const [modal, setModal] = useState<boolean>(false)
+    const [key, setKey] = useState<string>('ip')
+    const [search, setSearch] = useState<string>('')
 
     useEffect(() => {
         setAtribute(AtributeSet(object.object))
         retrieveItem()
     }, [page, size])
+    useEffect(()=>{
+        aa()
+    }, [search])
+    const aa = async() => {
+        console.log(search)
+        await retrieve(object.url, page, size, key, search).then((data: any) => {
+            startTransition(() => setPageable(data))
+            startTransition(() => setStates(data.content))
+        }).catch(() => { networkError() })
+    }
+    const searchItem = async (event: ChangeEvent<HTMLInputElement>) => {
+        setSearch(event.target.value)
+    }
     const resetItem = () => {
         loadSubStates()
         setState(object.object)
@@ -65,22 +80,22 @@ export const GenericForm = <T extends { id: string, name: string }>(object: any)
         }).catch(() => { networkError() })
     }
     const retrieveItem = async () => {
-        await retrieve(object.url, page, size, '', '').then((data: any) => {
+        await retrieve(object.url, page, size, key, search).then((data: any) => {
             startTransition(() => setPageable(data))
             startTransition(() => setStates(data.content))
         }).catch(() => { networkError() })
     }
     const loadSubStates = async () => {
-        Object.entries(state).map(([key, value], index) => {
-            return (
-                !(atribute[index]?.type === 'checkbox' || atribute[index]?.type === 'date' || value === null && atribute[index].worth === 0 || value === null && atribute[index].worth === '' || atribute[index]?.type !== 'undefined' && !Array.isArray(atribute[index]?.worth)) &&
-                retrieve(key, 0, 1000, '', '').then((data: any) => {
-                    startTransition(() => {
-                        subStates[index] = data.content
-                        setSubStates(subStates)
-                    })
-                }).catch(() => { networkError() })
-            )
+    Object.entries(state).map(([key, value], index) => {
+    return (
+    !(atribute[index]?.type === 'checkbox' || atribute[index]?.type === 'date' || value === null && atribute[index].worth === 0 || value === null && atribute[index].worth === '' || atribute[index]?.type !== 'undefined' && !Array.isArray(atribute[index]?.worth)) &&
+    retrieve(key, 0, 1000, '', '').then((data: any) => {
+    startTransition(() => {
+    subStates[index] = data.content
+    setSubStates(subStates)
+    })
+    }).catch(() => { networkError() })
+    )
         })
     }
     const updateItem = async () => {
@@ -254,6 +269,7 @@ export const GenericForm = <T extends { id: string, name: string }>(object: any)
                                     {/* <option value={15}>15</option> */}
                                 </select>
                         </TitleHeader>
+                        {object.url.includes('host') && <input name={search} onChange={searchItem} placeholder='search by IP'></input>}
                         {!object.url.includes('istoric') && <Button onClick={newItem}>New</Button>}
                     </Header>
                     {ispending && <Load></Load>}

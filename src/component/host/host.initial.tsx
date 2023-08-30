@@ -2,12 +2,12 @@ import { Host } from "./host.interface";
 
 export const initialHost : Host = {
     id: '',
-    mac: '',
+    ip: '',
+    name: '',
+    so: '',
     seal: '',
     memory: '',
     hd: '',
     processor: '',
-    so: '',
-    ip: '',
-    name: '',
+    mac: '',
 }

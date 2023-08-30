@@ -1,11 +1,11 @@
 export interface Host {
     id: string,
-    mac: string,
+    ip: string,
+    name: string,
+    so: string,
     seal: string,
     memory: string,
     hd: string,
     processor: string,
-    so: string,
-    ip: string,
-    name: string,
+    mac: string,
 }
